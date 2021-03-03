@@ -12,17 +12,17 @@ namespace DotNetCoreWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomersController : ControllerBase
+    public class CustomersController : ControllerBase 
     {
-        private readonly AppDbContext _context;
+        private readonly WebAppDbContext _context; //DbContext instance
 
-        public CustomersController(AppDbContext context)
+        public CustomersController(WebAppDbContext context) //contoller uses DbContext from above
         {
             _context = context;
         }
 
         // GET: api/Customers
-        [HttpGet]
+        [HttpGet] 
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomer()
         {
             return await _context.Customer.ToListAsync();

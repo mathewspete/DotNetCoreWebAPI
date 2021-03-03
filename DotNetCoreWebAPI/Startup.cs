@@ -24,8 +24,8 @@ namespace DotNetCoreWebAPI {
 		public void ConfigureServices(IServiceCollection services) {
 			services.AddControllers();
 
-    services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("AppDbContext")));
+    services.AddDbContext<WebAppDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("OrderDb")));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
