@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 #region SETUP
 /* EntityFrameworkCore.Tools and EFC.SQLServer
  * appsettings.json
- *	|	"AllowedHost"...
+ *	|	"AllowedHost":"*",
+ *	|	"ConnectionStrings":{
+ *	|		"OrederDb": "server=localhost\\sqlexpress;database=todo;trusted_connection=true;"
  */
 #endregion
 
