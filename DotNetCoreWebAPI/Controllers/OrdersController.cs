@@ -32,7 +32,7 @@ namespace DotNetCoreWebAPI.Controllers
     [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrder(int id)
         {
-            var order = await _context.Orders.Include(c => c.Customer).SingleOrDefaultAsync(o=>o.CustomerId == id);
+            var order = await _context.Orders.Include(c => c.Customer).SingleOrDefaultAsync(o=>o.Id == id);
             // include is used to join customer to order
 
             if (order == null)
