@@ -4,14 +4,16 @@ using DotNetCoreWebAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DotNetCoreWebAPI.Migrations
 {
     [DbContext(typeof(WebAppDbContext))]
-    partial class WebAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210305161632_Salesperson")]
+    partial class Salesperson
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,7 +90,7 @@ namespace DotNetCoreWebAPI.Migrations
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<int>("SalespersonId")
+                    b.Property<int?>("SalespersonId")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
@@ -168,9 +170,7 @@ namespace DotNetCoreWebAPI.Migrations
 
                     b.HasOne("DotNetCoreWebAPI.Models.Salesperson", "Salesperson")
                         .WithMany()
-                        .HasForeignKey("SalespersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SalespersonId");
                 });
 
             modelBuilder.Entity("DotNetCoreWebAPI.Models.Orderline", b =>

@@ -27,6 +27,7 @@ namespace DotNetCoreWebAPI.Controllers
         {
             return await _context.Orders
                                  .Include(c => c.Customer) // include is used to join customer to order
+                                 .Include(s => s.Salesperson) // include is used to join salesperson to order
                                  .ToListAsync(); 
         }
 
@@ -36,6 +37,7 @@ namespace DotNetCoreWebAPI.Controllers
         {
             var order = await _context.Orders
                                       .Include(c => c.Customer) // include is used to join customer to order
+                                      .Include(s => s.Salesperson) // include is used to join salesperson to order
                                       .Include(ol => ol.Orderlines) // links the orderline to order
                                       .ThenInclude(i => i.Item) // ThenInclude joins the item to the orderline, which is linked to the order 
                                       .SingleOrDefaultAsync(o=>o.Id == id); 

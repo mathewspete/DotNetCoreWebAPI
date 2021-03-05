@@ -12,6 +12,9 @@ namespace DotNetCoreWebAPI.Data {
 		public DbSet<Item> Item { get; set; }
 		public DbSet<Orderline> Orderline { get; set; }
 		public DbSet<Order> Orders { get; set; }
+		public DbSet<Salesperson> Salesperson { get; set; }
+
+
 
 
 		protected override void OnModelCreating(ModelBuilder builder) {
@@ -20,6 +23,8 @@ namespace DotNetCoreWebAPI.Data {
 				e.HasIndex(c => c.Code).IsUnique(true); //config/get idx for customers to use for code column. each Unique
 			});
 		}
+
+
 
 
 	}

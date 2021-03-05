@@ -27,7 +27,7 @@ namespace DotNetCoreWebAPI.Models {
 		public virtual Customer Customer { get; set; } // Set customer as foreign key // Virtual = not in DB only in class
 
 
-		public int SalespersonId { get; set; }
+		public int SalespersonId { get; set; } // ? = null allowed
 
 		public virtual Salesperson Salesperson { get; set; } // Set customer as foreign key // Virtual = not in DB only in class
 
