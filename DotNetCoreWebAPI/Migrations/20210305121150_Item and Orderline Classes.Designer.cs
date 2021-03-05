@@ -4,14 +4,16 @@ using DotNetCoreWebAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DotNetCoreWebAPI.Migrations
 {
     [DbContext(typeof(WebAppDbContext))]
-    partial class WebAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210305121150_Item and Orderline Classes")]
+    partial class ItemandOrderlineClasses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,26 +55,6 @@ namespace DotNetCoreWebAPI.Migrations
                     b.ToTable("Customer");
                 });
 
-            modelBuilder.Entity("DotNetCoreWebAPI.Models.Item", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(9,2)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Item");
-                });
-
             modelBuilder.Entity("DotNetCoreWebAPI.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -103,51 +85,11 @@ namespace DotNetCoreWebAPI.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("DotNetCoreWebAPI.Models.Orderline", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("Orderline");
-                });
-
             modelBuilder.Entity("DotNetCoreWebAPI.Models.Order", b =>
                 {
                     b.HasOne("DotNetCoreWebAPI.Models.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DotNetCoreWebAPI.Models.Orderline", b =>
-                {
-                    b.HasOne("DotNetCoreWebAPI.Models.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DotNetCoreWebAPI.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
