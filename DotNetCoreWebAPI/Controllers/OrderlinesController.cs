@@ -2,6 +2,7 @@
 using DotNetCoreWebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +16,23 @@ namespace DotNetCoreWebAPI.Controllers {
 		public OrderlinesController(WebAppDbContext context) {
 			_context = context;
 		}
+
+
+		private async Task<IActionResult> CalcSubtotal(int id) {
+			var order = await _context.Orders.FindAsync(id);
+			if (order==null) {
+				return NotFound();
+			}
+			order.Total = _context.Orderline.Where(li => li.OrderId == id)
+																			.Sum(li => li.Quantity * li.Item.Price);
+
+			var rowsAffected = await _context.SaveChangesAsync();
+			if(rowsAffected != 1) {
+				throw new Exception("Failed to Update Order Total");
+			}
+			return Ok();
+		}
+
 
 		// GET: api/Orderlines
 		[HttpGet]
@@ -34,6 +52,8 @@ namespace DotNetCoreWebAPI.Controllers {
 			return orderline;
 		}
 
+
+
 		// PUT: api/Orderlines/5
 		// To protect from overposting attacks, enable the specific properties you want to bind to, for
 		// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -47,6 +67,7 @@ namespace DotNetCoreWebAPI.Controllers {
 
 			try {
 				await _context.SaveChangesAsync();
+				await CalcSubtotal(orderline.OrderId);
 			}
 			catch (DbUpdateConcurrencyException) {
 				if (!OrderlineExists(id)) {
@@ -67,6 +88,7 @@ namespace DotNetCoreWebAPI.Controllers {
 		public async Task<ActionResult<Orderline>> PostOrderline(Orderline orderline) {
 			_context.Orderline.Add(orderline);
 			await _context.SaveChangesAsync();
+			await CalcSubtotal(orderline.OrderId);
 
 			return CreatedAtAction("GetOrderline", new { id = orderline.Id }, orderline);
 		}
@@ -81,6 +103,7 @@ namespace DotNetCoreWebAPI.Controllers {
 
 			_context.Orderline.Remove(orderline);
 			await _context.SaveChangesAsync();
+			await CalcSubtotal(orderline.OrderId);
 
 			return orderline;
 		}
@@ -90,3 +113,4 @@ namespace DotNetCoreWebAPI.Controllers {
 		}
 	}
 }
+

@@ -16,6 +16,55 @@ namespace DotNetCoreWebAPI.Controllers {
 			_context = context;
 		}
 
+
+		// PUT: api/Orders/Edit/5
+		// 
+		[HttpPut("edit/{id}")] 
+		public async Task<IActionResult> SetStatusToEdit(int id) {
+			var order = await _context.Orders.FindAsync(id);
+			if (order==null) {
+				return NotFound();
+			}
+			order.Status = "Edit";
+			return await PutOrder(order.Id, order);
+		}
+
+		// PUT: api/Orders/Proposed/5
+		// 
+		[HttpPut("proposed/{id}")]
+		public async Task<IActionResult> SetStatusToProposed(int id) {
+			var order = await _context.Orders.FindAsync(id);
+			if (order == null) {
+				return NotFound();
+			}
+			order.Status = (order.Total > 100 && order.Total != 0)?"Proposed":"Final";
+			return await PutOrder(order.Id, order);
+		}
+
+		// PUT: api/Orders/Final/5
+		// 
+		[HttpPut("final/{id}")]
+		public async Task<IActionResult> SetStatusToFinal(int id) {
+			var order = await _context.Orders.FindAsync(id);
+			if (order == null) {
+				return NotFound();
+			}
+			order.Status = "Final";
+			return await PutOrder(order.Id, order);
+		}
+
+
+		// GET: api/Orders/proposed
+		[HttpGet("proposed")]
+		public async Task<ActionResult<IEnumerable<Order>>> GetProposed() {
+			return await _context.Orders
+														.Where(o => o.Status=="Proposed")
+														.Include(c => c.Customer) // include is used to join customer to order
+														.Include(s => s.Salesperson) // include is used to join salesperson to order
+														.ToListAsync();
+		}
+
+
 		// GET: api/Orders
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<Order>>> GetOrders() {
@@ -28,12 +77,15 @@ namespace DotNetCoreWebAPI.Controllers {
 		// GET: api/Orders/5
 		[HttpGet("{id}")]
 		public async Task<ActionResult<Order>> GetOrder(int id) {
+
+
 			var order = await _context.Orders
 																.Include(c => c.Customer) // include is used to join customer to order
 																.Include(s => s.Salesperson) // include is used to join salesperson to order
 																.Include(ol => ol.Orderlines) // links the orderline to order
 																.ThenInclude(i => i.Item) // ThenInclude joins the item to the orderline, which is linked to the order 
 																.SingleOrDefaultAsync(o => o.Id == id);
+
 
 
 			if (order == null) {
