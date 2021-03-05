@@ -15,8 +15,11 @@ namespace DotNetCoreWebAPI.Models {
 		[Column(TypeName = "decimal(9,2)")]
 		public decimal Total { get; set; }
 		public int CustomerId { get; set; }
-		public virtual Customer Customer { get; set; } // Set customer as foreign key
-		
+		public virtual Customer Customer { get; set; } // Set customer as foreign key // Virtual = not in DB only in class
+		[Required]
+		public virtual IEnumerable<Orderline> Orderlines { get; set; } // Virtual = not in DB only in class
+
+
 		public Order() {}
 	}
 

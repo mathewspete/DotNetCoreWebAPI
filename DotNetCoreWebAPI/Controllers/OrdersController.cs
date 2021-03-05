@@ -25,15 +25,21 @@ namespace DotNetCoreWebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
-            return await _context.Orders.Include(c => c.Customer).ToListAsync(); // include is used to join customer to order
+            return await _context.Orders
+                                 .Include(c => c.Customer) // include is used to join customer to order
+                                 .ToListAsync(); 
         }
 
     // GET: api/Orders/5
     [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrder(int id)
         {
-            var order = await _context.Orders.Include(c => c.Customer).SingleOrDefaultAsync(o=>o.Id == id);
-            // include is used to join customer to order
+            var order = await _context.Orders
+                                      .Include(c => c.Customer) // include is used to join customer to order
+                                      .Include(ol => ol.Orderlines) // links the orderline to order
+                                      .ThenInclude(i => i.Item) // ThenInclude joins the item to the orderline, which is linked to the order 
+                                      .SingleOrDefaultAsync(o=>o.Id == id); 
+           
 
             if (order == null)
             {
